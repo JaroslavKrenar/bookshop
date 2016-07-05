@@ -14,6 +14,6 @@ class ExampleTest extends TestCase
     public function testBasicExample()
     {
         $this->visit('/')
-             ->see('RESTful API By Jaroslav Krenar');
+             ->see('REST API By Jaroslav Krenar');
     }
 }
