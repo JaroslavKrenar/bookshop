@@ -13,7 +13,7 @@ $ php composer.phar install
 
 ## Configuration
 
-You can configure database connection in ```config/database.php``` and create tables with the following command:
+You can configure database connection in ```config/database.php``` (```mysql``` is selected as default) and create tables with the following command:
 
 ```
 $ php artisan migrate
