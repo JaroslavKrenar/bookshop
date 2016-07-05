@@ -17,6 +17,7 @@ You can configure database connection in ```config/database.php``` (```mysql``` 
 
 ```
 $ php artisan migrate
+$ php artisan key:generate
 ```
 
 ## Usage
