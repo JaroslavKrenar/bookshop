@@ -1,27 +1,143 @@
-# Laravel PHP Framework
+# bookshop
+bookshop REST API example
 
-[![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
-[![Total Downloads](https://poser.pugx.org/laravel/framework/d/total.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Stable Version](https://poser.pugx.org/laravel/framework/v/stable.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Unstable Version](https://poser.pugx.org/laravel/framework/v/unstable.svg)](https://packagist.org/packages/laravel/framework)
-[![License](https://poser.pugx.org/laravel/framework/license.svg)](https://packagist.org/packages/laravel/framework)
+## Requirements
+* PHP 5.5+
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as authentication, routing, sessions, queueing, and caching.
+## installation
 
-Laravel is accessible, yet powerful, providing tools needed for large, robust applications. A superb inversion of control container, expressive migration system, and tightly integrated unit testing support give you the tools you need to build any application with which you are tasked.
+```
+$ git clone https://github.com/JaroslavKrenar/bookshop.git
+$ php composer.phar install
+```
 
-## Official Documentation
+## Configuration
 
-Documentation for the framework can be found on the [Laravel website](http://laravel.com/docs).
+You can configure database connection in ```config/database.php``` and create tables with the following command:
 
-## Contributing
+```
+$ php artisan migrate
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
+## Usage
 
-## Security Vulnerabilities
+```
+$ php -S localhost:8000 server.php
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+## Test suite
 
-## License
+The test suite is run via phpunit. 
 
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
+To run the unit tests: `phpunit`
+
+## API
+
+Please specify `"accept"` header field to decide what type of content should be response.
+
+Supported headers:
+
+`"application/json"` - JSON request and response
+
+### GET /api/v1/search
+
+##### Parameters
+
+| Name  | Type | Description |
+| ------------- | ------------- | -------------|
+| isbn  | string | ISBN |
+| author | string | Author name |
+| title | string  | Book title |
+| release_date | string  | Release data. You can use ```"|"``` to find between dates, e.g. ```2015-01-01|2016-01-01```  |
+| minimum_rating | float  | Search by minimum rating |
+
+#### Example
+
+```
+$ http://localhost:8000/api/v1/search?release_date=2005-07-04
+```
+##### Response
+
+```
+Status: 200 OK
+
+{
+  "count": 1,
+  "books": [
+    {
+      "ID": 2,
+      "isbn": "9784115709669",
+      "author": "Velda Keeling Jr.",
+      "title": "Hatter. 'Nor I,' said the Mock Turtle Soup is.",
+      "rating": "9.99",
+      "release_date": "2005-07-04",
+      "created_at": "2016-07-04 10:01:59",
+      "updated_at": "2016-07-04 10:01:59"
+    }
+  ]
+}
+```
+
+### POST /api/v1/add-book
+
+##### Parameters
+
+| Name  | Type | Description |
+| ------------- | ------------- | -------------|
+| isbn  | string | ISBN |
+| author | string | Author name |
+| title | string  | Book title |
+| rating | float  | Book rating  |
+| release_date | string  | Release data in format ```Y-m-d``` |
+
+#### Example
+
+Request
+```
+$ http://localhost:8000/api/v1/add-book
+
+{
+  'isbn' => "9780833052643"
+  'author' => "Pascale Lesch"
+  'title' => "WILL do next! If they had to fall a long way. So."
+  'rating' => 3.44
+  'release_date' => "2016-01-23"
+}
+```
+##### Response
+
+```
+Status: 200 OK
+
+{
+  "id": 1000
+}
+```
+##### Error response
+
+```
+Status: 500 Internal Server Error
+
+{
+  "message": "Invalid input data",
+  "code": 500,
+  "type": "ValidationException",
+  "data": {
+    "isbn": [
+      "The isbn field is required."
+    ],
+    "author": [
+      "The author field is required."
+    ],
+    "title": [
+      "The title field is required."
+    ],
+    "rating": [
+      "The rating field is required."
+    ],
+    "release_date": [
+      "The release date field is required."
+    ]
+  }
+}
+```
