@@ -1,4 +1,6 @@
 # bookshop
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/JaroslavKrenar/bookshop.svg)](https://greenkeeper.io/)
 bookshop REST API example
 
 ## Requirements
